@@ -1,37 +1,12 @@
-from fractions import Fraction
+import numpy as np
+
+from npytypes.rational import rational as R
 
 # To experiment, let's stick with TLM
 # SI_base = "TLMIϴNJ"
 # (Time, Length, Mass, Electric current,
 # Thermodynamic temperature, Amount of substance, Luminous intensity)
 SI_base = "TLM"
-
-
-# Constrained vector implementation
-# This could be a NumPy array,
-# but we will start with this simple implementation
-# to have a better understanding
-class Vector:
-    def __init__(self, values):
-        self._values = values
-
-    def __add__(self, other):
-        return Vector([s + o for (s, o) in zip(self._values, other._values)])
-
-    def __rmul__(self, other):
-        return Vector([other * s for s in self._values])
-
-    def __getitem__(self, key):
-        return self._values[key]
-
-    def __len__(self):
-        return len(self._values)
-
-    def __repr__(self):
-        return repr(self._values)
-
-    def __eq__(self, other):
-        return (len(self) == len(other)) and all(s == o for (s, o) in zip(self, other))
 
 
 # Dimensions form a vector space
@@ -45,7 +20,7 @@ class Dimension:
         return Dimension(self._vector + other._vector)
 
     def __pow__(self, other):
-        return Dimension(Fraction(other) * self._vector)
+        return Dimension(R(other) * self._vector)
 
     def __repr__(self):
         fragments = []
@@ -56,12 +31,13 @@ class Dimension:
         return "".join(fragments) if fragments else "(0)"
 
     def __eq__(self, other):
-        return (self._vector == other._vector) and (self._base == other._base)
+        return (self._vector == other._vector).all() and (self._base == other._base)
 
 
-T = Dimension(Vector([1, 0, 0]))
-L = Dimension(Vector([0, 1, 0]))
-M = Dimension(Vector([0, 0, 1]))
+# TODO: Make convenience constructor
+T = Dimension(np.array([1, 0, 0], dtype=R))
+L = Dimension(np.array([0, 1, 0], dtype=R))
+M = Dimension(np.array([0, 0, 1], dtype=R))
 
 
 # To relate each unit with the others,
@@ -92,7 +68,7 @@ class Unit:
         return Unit(
             self._magnitude ** other,
             self._dimensions ** other,
-            [f"{n}{Fraction(other)}" for n in self._names],
+            [f"{n}{R(other)}" for n in self._names],
         )
 
     def __truediv__(self, other):
@@ -108,8 +84,7 @@ class Unit:
             # NOTE: Explicit dependency with NumPy,
             # should we make this more generic?
             # Or is it enough to provide a convenience constructor?
-            import numpy as np
-
+            # Should we use np.asarray instead?
             other = np.array(other)
         return Quantity(other, self)
 
@@ -165,11 +140,12 @@ qv3 = Quantity(np.random.randn(10_000), m)
 # Promising benchmarks:
 # basic arithmetic is ~2x faster than astropy.units,
 # quantity creation is ~10x faster than astropy.units.
-# To improve: composite unit creation is ~10x slower than astropy.units
-# mainly because of Vector and Fraction
+# composite unit creation is ~1.2x faster than astropy.units.
 
 # This was Step 0
-# Step 1: Use faster vector (numpy.array?) and fraction arithmetic (cfractions?)
+# Step 1: Use faster vector (numpy.array?) and fraction arithmetic (cfractions?) (done)
+# stdlib.fractions + Vector gave decent performance, but rational dtype with NumPy arrays was better
+
 # Step 2: Figure out dimensionless quantities (including angles)
 # Step 3: Mathematical operations (NumPy ufuncs) including angles (conversion to radians)
 # Step 4: Try more micro optimizations (compile with Cython?)
