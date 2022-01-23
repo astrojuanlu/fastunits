@@ -17,3 +17,12 @@ To install, run
 ## Overview
 
 Add a longer description here.
+
+## Notes
+
+- NumPy compatibility
+- Different unit systems (CODATA versioned constants), should be easy to
+  swap them and make calculations between them
+- Seven dimensions: time, length, mass, electric current, thermodynamic temperature,
+  amount of substance, luminous intensity
+  - Angles are derived units in m/m
