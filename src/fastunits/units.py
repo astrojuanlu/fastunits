@@ -29,9 +29,9 @@ class Unit:
         # hence we hardcode 1.0
         return cls(1.0, dimensions, [name])
 
-    def derived(self: T, relative_magnitude: float, names: list[str]) -> T:
+    def derived(self: T, relative_magnitude: float, name: str) -> T:
         return self.__class__(
-            relative_magnitude * self._magnitude, self._dimensions, names
+            relative_magnitude * self._magnitude, self._dimensions, [name]
         )
 
     def __repr__(self):

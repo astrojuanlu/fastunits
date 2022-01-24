@@ -21,7 +21,7 @@ M = Dimension(np.array([0, 0, 1], dtype=R), base=SI_base)
 
 
 m = Unit.base(L, "m")
-cm = m.derived(1e-2, ["cm"])
+cm = m.derived(1e-2, "cm")
 s = Unit.base(T, "s")
 kg = Unit.base(M, "kg")
 

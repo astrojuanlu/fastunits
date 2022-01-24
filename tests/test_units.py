@@ -22,7 +22,7 @@ def test_unit_base_returns_expected_result(dimension):
 
 def test_unit_derived_returns_expected_result(dimension):
     unit_base = Unit.base(dimension, "a")
-    unit_d = unit_base.derived(10, ["da"])
+    unit_d = unit_base.derived(10, "da")
     expected_unit = Unit(10, dimension, ["da"])
 
     assert unit_d == expected_unit
