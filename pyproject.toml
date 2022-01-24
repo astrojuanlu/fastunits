@@ -20,10 +20,11 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
+dependencies = [
+    "numpy",
+    "npytypes @ git+https://github.com/astrojuanlu/numpy-dtypes.git",
+]
 dynamic = ["version", "description"]
-
-[tool.flit.module]
-name = "fastunits"
 
 [project.urls]
 source = "https://github.com/astrojuanlu/fastunits"
