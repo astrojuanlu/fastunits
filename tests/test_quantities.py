@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 
 from fastunits.dimensions import Dimension
-from fastunits.quantities import IncommensurableUnitsError, ScalarQuantity
-from fastunits.units import Unit
+from fastunits.quantities import ScalarQuantity
+from fastunits.units import IncommensurableUnitsError, Unit
 
 
 @pytest.fixture

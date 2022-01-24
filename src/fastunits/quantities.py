@@ -2,11 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .units import Unit
-
-
-class IncommensurableUnitsError(ValueError):
-    pass
+from .units import IncommensurableUnitsError, Unit
 
 
 # Each quantity is a value with a unit

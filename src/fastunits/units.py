@@ -8,6 +8,10 @@ from .dimensions import Dimension
 T = TypeVar("T", bound="Unit")
 
 
+class IncommensurableUnitsError(ValueError):
+    pass
+
+
 # To relate each unit with the others,
 # we introduce the concept of "magnitude",
 # which will be unitary for fundamental units in the system
