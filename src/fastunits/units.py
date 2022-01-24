@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from fractions import Fraction
-from typing import TypeVar
+from typing import Type, TypeVar
 
 from .dimensions import Dimension
 
@@ -21,6 +21,13 @@ class Unit:
         self._magnitude = magnitude
         self._dimensions = dimensions
         self._names = names
+
+    @classmethod
+    def base(cls: Type[T], dimensions: Dimension, name: str) -> T:
+        # The magnitude of base units is not important,
+        # what's important is the relative magnitude of derived units,
+        # hence we hardcode 1.0
+        return cls(1.0, dimensions, [name])
 
     def derived(self: T, relative_magnitude: float, names: list[str]) -> T:
         return self.__class__(

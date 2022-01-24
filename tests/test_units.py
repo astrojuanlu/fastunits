@@ -5,15 +5,23 @@ from fastunits.units import Unit
 
 @pytest.fixture
 def unit(dimension):
-    return Unit(1, dimension, ["a"])
+    return Unit.base(dimension, "a")
 
 
 def test_units_are_equal_to_themselves(unit):
     assert unit == unit
 
 
+def test_unit_base_returns_expected_result(dimension):
+    expected_unit = Unit(1.0, dimension, ["a"])
+
+    unit = Unit.base(dimension, "a")
+
+    assert unit == expected_unit
+
+
 def test_unit_derived_returns_expected_result(dimension):
-    unit_base = Unit(1, dimension, ["a"])
+    unit_base = Unit.base(dimension, "a")
     unit_d = unit_base.derived(10, ["da"])
     expected_unit = Unit(10, dimension, ["da"])
 

@@ -20,10 +20,10 @@ L = Dimension(np.array([0, 1, 0], dtype=R), base=SI_base)
 M = Dimension(np.array([0, 0, 1], dtype=R), base=SI_base)
 
 
-m = Unit(1, L, ["m"])
+m = Unit.base(L, "m")
 cm = m.derived(1e-2, ["cm"])
-s = Unit(1, T, ["s"])
-kg = Unit(1, M, ["kg"])
+s = Unit.base(T, "s")
+kg = Unit.base(M, "kg")
 
 
 q1 = 10 << cm
