@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from fractions import Fraction
-from typing import Type, TypeVar
+from typing import TypeVar
 
 from .dimensions import Dimension
 
@@ -18,11 +18,10 @@ class Unit:
         self._dimensions = dimensions
         self._names = names
 
-    @classmethod
-    def derived(
-        cls: Type[T], other: T, relative_magnitude: float, names: list[str]
-    ) -> T:
-        return cls(relative_magnitude * other._magnitude, other._dimensions, names)
+    def derived(self: T, relative_magnitude: float, names: list[str]) -> T:
+        return self.__class__(
+            relative_magnitude * self._magnitude, self._dimensions, names
+        )
 
     def __repr__(self):
         return f"{'·'.join(n for n in self._names)}"

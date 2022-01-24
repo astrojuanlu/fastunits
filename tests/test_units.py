@@ -14,7 +14,7 @@ def test_units_are_equal_to_themselves(unit):
 
 def test_unit_derived_returns_expected_result(dimension):
     unit_base = Unit(1, dimension, ["a"])
-    unit_d = unit_base.derived(unit_base, 10, ["da"])
+    unit_d = unit_base.derived(10, ["da"])
     expected_unit = Unit(10, dimension, ["da"])
 
     assert unit_d == expected_unit
