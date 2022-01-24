@@ -5,7 +5,7 @@ from npytypes.rational import rational as R
 
 from fastunits.dimensions import Dimension
 from fastunits.units import Unit
-from fastunits.quantities import ScalarQuantity as Quantity
+from fastunits.quantities import ScalarQuantity, ArrayQuantity
 
 # To experiment, let's stick with TLM
 # SI_base = "TLMIϴNJ"
@@ -34,9 +34,11 @@ qp = q1 + q2
 print(q1, q2, qq, qp)
 
 # TODO: np.array([1, 0, 0]) << m does not work as intended
-qv1 = Quantity(np.array([1, 0, 0]), m)
-qv2 = Quantity(np.array([0, 1, 0]), cm)
-qv3 = Quantity(np.random.randn(10_000), m)
+qv1 = ArrayQuantity.from_list([1, 0, 0], m)
+qv2 = ArrayQuantity.from_list([0, 1, 0], cm)
+qv3 = ArrayQuantity(np.random.randn(10_000), m)
+
+print(qv1 + qv2)
 
 # TODO: 2 * qv1 is not implemented
 # TODO: Creating dimensionless quantities is difficult

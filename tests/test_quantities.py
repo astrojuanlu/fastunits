@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from fastunits.dimensions import Dimension
-from fastunits.quantities import ScalarQuantity
+from fastunits.quantities import ArrayQuantity, ScalarQuantity
 from fastunits.units import IncommensurableUnitsError, Unit
 
 
@@ -16,7 +16,7 @@ def quantity(unit):
     return ScalarQuantity(1.0, unit)
 
 
-def test_quantity_to_value_returns_expected_result(quantity):
+def test_scalar_quantity_to_value_returns_expected_result(quantity):
     input_value = 1.0
     multiplier = 10.0
 
@@ -59,7 +59,7 @@ def test_quantities_different_are_different(quantity):
     assert q2 != quantity
 
 
-def test_quantity_product_returns_expected_result(unit):
+def test_scalar_quantity_product_returns_expected_result(unit):
     q1 = ScalarQuantity(2.0, unit)
     q2 = ScalarQuantity(3.0, unit)
 
@@ -70,7 +70,7 @@ def test_quantity_product_returns_expected_result(unit):
     assert q == expected_q
 
 
-def test_quantity_addition_returns_expected_result(unit):
+def test_scalar_quantity_addition_returns_expected_result(unit):
     q1 = ScalarQuantity(2.0, unit)
     q2 = ScalarQuantity(3.0, unit)
 
@@ -93,3 +93,32 @@ def test_addition_incommensurable_quantities_raises_error(base):
 
     with pytest.raises(IncommensurableUnitsError, match="Incommensurable quantities"):
         q1 + q2
+
+
+def test_array_quantity_from_list_returns_expected_result(unit):
+    q = ArrayQuantity.from_list([1, 2, 3], unit)
+
+    expected_quantity = ArrayQuantity(np.array([1, 2, 3]), unit)
+
+    assert q.equals_exact(expected_quantity)
+
+
+def test_array_quantity_addition_returns_expected_result(unit):
+    q1 = ArrayQuantity.from_list([1.0, 2.0, 3.0], unit)
+    q2 = ArrayQuantity.from_list([2.0, 3.0, 4.0], unit)
+
+    expected_quantity = ArrayQuantity.from_list([3.0, 5.0, 7.0], unit)
+
+    q = q1 + q2
+
+    assert q.equals_exact(expected_quantity)
+
+
+def test_array_quantity_different_scales_are_equivalent(unit):
+    q1 = ArrayQuantity.from_list([10, 20, 30], unit)
+    u2 = unit.derived(10.0, "da")
+    expected_quantity = ArrayQuantity.from_list([1.0, 2.0, 3.0], u2)
+
+    q_derived = q1.to(u2)
+
+    assert q_derived.is_equivalent_exact(expected_quantity)

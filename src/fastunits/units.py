@@ -5,7 +5,7 @@ from typing import Type, TypeVar
 
 from .dimensions import Dimension
 
-T = TypeVar("T", bound="Unit")
+_T = TypeVar("_T", bound="Unit")
 
 
 class IncommensurableUnitsError(ValueError):
@@ -23,13 +23,13 @@ class Unit:
         self._names = names
 
     @classmethod
-    def base(cls: Type[T], dimensions: Dimension, name: str) -> T:
+    def base(cls: Type[_T], dimensions: Dimension, name: str) -> _T:
         # The magnitude of base units is not important,
         # what's important is the relative magnitude of derived units,
         # hence we hardcode 1.0
         return cls(1.0, dimensions, [name])
 
-    def derived(self: T, relative_magnitude: float, name: str) -> T:
+    def derived(self: _T, relative_magnitude: float, name: str) -> _T:
         return self.__class__(
             relative_magnitude * self._magnitude, self._dimensions, [name]
         )
