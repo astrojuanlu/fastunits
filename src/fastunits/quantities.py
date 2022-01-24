@@ -1,15 +1,18 @@
 from __future__ import annotations
 
-from .units import Unit
+from typing import Any, Sequence, Type, TypeVar
 
+import numpy as np
+from numpy.typing import NBitBase, NDArray
 
-class IncommensurableUnitsError(ValueError):
-    pass
+from .units import IncommensurableUnitsError, Unit
+
+_T = TypeVar("_T", bound="_BaseQuantity")
 
 
 # Each quantity is a value with a unit
-class Quantity:
-    def __init__(self, value: float, unit: Unit):
+class _BaseQuantity:
+    def __init__(self, value: Any, unit: Unit):
         self._value = value
         self._unit = unit
 
@@ -21,23 +24,47 @@ class Quantity:
         return f"{self._value} {self._unit}"
 
     def __mul__(self, other):
-        return Quantity(self._value * other._value, self._unit * other._unit)
+        return self.__class__(self._value * other._value, self._unit * other._unit)
 
     def __add__(self, other):
         # The line below will fail if the magnitudes are incommensurable
         other_converted_value = other.to_value(self._unit)
-        return Quantity(self._value + other_converted_value, self._unit)
+        return self.__class__(self._value + other_converted_value, self._unit)
 
-    def __eq__(self, other):
-        return self.exactly_equal(other) or self.exactly_equal(other.to(self.unit))
-
-    def exactly_equal(self, other: Quantity) -> bool:
-        return (self._value == other._value) and (self.unit == other.unit)
-
-    def to_value(self, unit: Unit) -> float:  # TODO: NumPy quantities
+    def to_value(self, unit: Unit) -> Any:
         if unit._dimensions != self._unit._dimensions:
             raise IncommensurableUnitsError("Incommensurable quantities")
         return (self._unit._magnitude / unit._magnitude) * self._value
 
-    def to(self, unit):
-        return Quantity(self.to_value(unit), unit)
+    def to(self: _T, unit: Unit) -> _T:
+        return self.__class__(self.to_value(unit), unit)
+
+
+class ScalarQuantity(_BaseQuantity):
+    def __init__(self, value: float, unit: Unit):
+        super().__init__(value, unit)
+
+    def __eq__(self, other):
+        return self.exactly_equal(other) or self.exactly_equal(other.to(self.unit))
+
+    def exactly_equal(self, other: _BaseQuantity) -> bool:
+        return bool((self.unit == other.unit) and (self._value == other._value))
+
+
+_TA = TypeVar("_TA", bound="ArrayQuantity")
+_P = TypeVar("_P", bound=NBitBase)
+
+
+class ArrayQuantity(_BaseQuantity):
+    def __init__(self, value: NDArray[np.number[_P]], unit: Unit):
+        super().__init__(value, unit)
+
+    @classmethod
+    def from_list(cls: Type[_TA], values: Sequence[float], unit: Unit) -> _TA:
+        return cls(np.array(values), unit)
+
+    def equals_exact(self, other: _BaseQuantity) -> bool:
+        return (self.unit == other.unit) and bool((self._value == other._value).all())
+
+    def is_equivalent_exact(self, other: _BaseQuantity) -> bool:
+        return self.equals_exact(other) or self.equals_exact(other.to(self.unit))

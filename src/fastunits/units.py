@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from fractions import Fraction
-from typing import TypeVar
+from typing import Type, TypeVar
 
 from .dimensions import Dimension
 
-T = TypeVar("T", bound="Unit")
+_T = TypeVar("_T", bound="Unit")
+
+
+class IncommensurableUnitsError(ValueError):
+    pass
 
 
 # To relate each unit with the others,
@@ -18,9 +22,16 @@ class Unit:
         self._dimensions = dimensions
         self._names = names
 
-    def derived(self: T, relative_magnitude: float, names: list[str]) -> T:
+    @classmethod
+    def base(cls: Type[_T], dimensions: Dimension, name: str) -> _T:
+        # The magnitude of base units is not important,
+        # what's important is the relative magnitude of derived units,
+        # hence we hardcode 1.0
+        return cls(1.0, dimensions, [name])
+
+    def derived(self: _T, relative_magnitude: float, name: str) -> _T:
         return self.__class__(
-            relative_magnitude * self._magnitude, self._dimensions, names
+            relative_magnitude * self._magnitude, self._dimensions, [name]
         )
 
     def __repr__(self):
@@ -49,9 +60,9 @@ class Unit:
 
     def __rlshift__(self, other):
         # This implements number << unit for easy Quantity creation
-        from .quantities import Quantity
+        from .quantities import ScalarQuantity
 
-        return Quantity(other, self)
+        return ScalarQuantity(other, self)
 
     def __eq__(self, other):
         # NOTE: This compares magnitudes exactly even if they are floating point values,
