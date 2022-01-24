@@ -26,9 +26,6 @@ dependencies = [
 ]
 dynamic = ["version", "description"]
 
-[tool.flit.module]
-name = "fastunits"
-
 [project.urls]
 source = "https://github.com/astrojuanlu/fastunits"
 tracker = "https://github.com/astrojuanlu/fastunits/issues"
