@@ -33,10 +33,9 @@ qp = q1 + q2
 
 print(q1, q2, qq, qp)
 
-# TODO: np.array([1, 0, 0]) << m does not work as intended
-qv1 = ArrayQuantity.from_list([1, 0, 0], m)
-qv2 = ArrayQuantity.from_list([0, 1, 0], cm)
-qv3 = ArrayQuantity(np.random.randn(10_000), m)
+qv1 = [1, 0, 0] << m
+qv2 = [0, 1, 0] << cm
+qv3 = np.random.randn(10_000) << m
 
 print(qv1 + qv2)
 

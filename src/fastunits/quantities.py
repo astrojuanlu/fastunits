@@ -61,7 +61,10 @@ class ArrayQuantity(_BaseQuantity):
 
     @classmethod
     def from_list(cls: Type[_TA], values: Sequence[float], unit: Unit) -> _TA:
-        return cls(np.array(values), unit)
+        # TODO: Should we go beyond np.asarray?
+        # See https://numpy.org/neps/nep-0047-array-api-standard.html\
+        # #the-asarray-asanyarray-pattern
+        return cls(np.asarray(values), unit)
 
     def equals_exact(self, other: _BaseQuantity) -> bool:
         return (self.unit == other.unit) and bool((self._value == other._value).all())

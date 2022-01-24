@@ -17,6 +17,12 @@ class IncommensurableUnitsError(ValueError):
 # which will be unitary for fundamental units in the system
 # Notice that we use the same class for simple units and for composite units
 class Unit:
+
+    # Trick to make `np.array([...]) << unit` work,
+    # borrowed from https://github.com/astropy/astropy/blob/d1e122d/\
+    # astropy/units/core.py#L630-L632
+    __array_priority__ = 1001
+
     def __init__(self, magnitude: float, dimensions: Dimension, names: list[str]):
         self._magnitude = magnitude
         self._dimensions = dimensions
@@ -60,9 +66,14 @@ class Unit:
 
     def __rlshift__(self, other):
         # This implements number << unit for easy Quantity creation
-        from .quantities import ScalarQuantity
+        if hasattr(other, "__len__"):
+            from .quantities import ArrayQuantity
 
-        return ScalarQuantity(other, self)
+            return ArrayQuantity.from_list(other, self)
+        else:
+            from .quantities import ScalarQuantity
+
+            return ScalarQuantity(other, self)
 
     def __eq__(self, other):
         # NOTE: This compares magnitudes exactly even if they are floating point values,
