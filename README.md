@@ -26,3 +26,5 @@ Add a longer description here.
 - Seven dimensions: time, length, mass, electric current, thermodynamic temperature,
   amount of substance, luminous intensity
   - Angles are derived units in m/m
+- See https://github.com/tbekolay/quantities-comparison !
+- See also https://mpusz.github.io/wg21-papers/papers/1935R0_a_cpp_approach_to_physical_units.html especially ISO 80000-1:2009(E)
