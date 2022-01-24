@@ -29,6 +29,15 @@ def test_quantity_to_value_returns_expected_result(quantity):
     assert value == expected_value
 
 
+def test_lshift_quantity_creation_from_units_returns_expected_result(unit):
+    value = 1.0
+    expected_quantity = Quantity(value, unit)
+
+    quantity = 1.0 << unit
+
+    assert quantity == expected_quantity
+
+
 def test_quantities_are_equal_to_themselves(quantity):
     assert quantity == quantity
 

@@ -47,6 +47,12 @@ class Unit:
             self._names + [f"{n}-1" for n in other._names],
         )
 
+    def __rlshift__(self, other):
+        # This implements number << unit for easy Quantity creation
+        from .quantities import Quantity
+
+        return Quantity(other, self)
+
     def __eq__(self, other):
         # NOTE: This compares magnitudes exactly even if they are floating point values,
         # since we are checking for exact equality
