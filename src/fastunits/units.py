@@ -49,9 +49,9 @@ class Unit:
 
     def __rlshift__(self, other):
         # This implements number << unit for easy Quantity creation
-        from .quantities import Quantity
+        from .quantities import ScalarQuantity
 
-        return Quantity(other, self)
+        return ScalarQuantity(other, self)
 
     def __eq__(self, other):
         # NOTE: This compares magnitudes exactly even if they are floating point values,

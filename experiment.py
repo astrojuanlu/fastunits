@@ -5,7 +5,7 @@ from npytypes.rational import rational as R
 
 from fastunits.dimensions import Dimension
 from fastunits.units import Unit
-from fastunits.quantities import Quantity
+from fastunits.quantities import ScalarQuantity as Quantity
 
 # To experiment, let's stick with TLM
 # SI_base = "TLMIϴNJ"
