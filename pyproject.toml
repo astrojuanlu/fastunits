@@ -21,7 +21,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 dependencies = [
-    "npytypes @ git+https://github.com/numpy/numpy-dtypes.git",
+    "numpy",
+    "npytypes @ git+https://github.com/astrojuanlu/numpy-dtypes.git",
 ]
 dynamic = ["version", "description"]
 
