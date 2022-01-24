@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from numpy.typing import NDArray
 
 from fastunits.dimensions import Dimension
 from fastunits.quantities import ArrayQuantity, ScalarQuantity
@@ -29,7 +30,7 @@ def test_scalar_quantity_to_value_returns_expected_result(quantity):
     assert value == expected_value
 
 
-def test_lshift_quantity_creation_from_units_returns_expected_result(unit):
+def test_lshift_scalar_quantity_creation_from_units_returns_expected_result(unit):
     value = 1.0
     expected_quantity = ScalarQuantity(value, unit)
 
@@ -93,6 +94,26 @@ def test_addition_incommensurable_quantities_raises_error(base):
 
     with pytest.raises(IncommensurableUnitsError, match="Incommensurable quantities"):
         q1 + q2
+
+
+def test_lshift_array_quantity_creation_from_units_returns_expected_result(unit):
+    value = [1.0, 2.0, 3.0]
+    expected_quantity = ArrayQuantity.from_list(value, unit)
+
+    quantity = value << unit
+
+    assert quantity.equals_exact(expected_quantity)
+
+
+def test_lshift_array_quantity_creation_from_units_using_array_returns_expected_result(
+    unit,
+):
+    value = np.array([1.0, 2.0, 3.0])  # type: NDArray[np.float_]
+    expected_quantity = ArrayQuantity(value, unit)
+
+    quantity = value << unit
+
+    assert quantity.equals_exact(expected_quantity)
 
 
 def test_array_quantity_from_list_returns_expected_result(unit):
