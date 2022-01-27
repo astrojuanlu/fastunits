@@ -35,6 +35,10 @@ class Unit:
         # hence we hardcode 1.0
         return cls(1.0, dimensions, [name])
 
+    @classmethod
+    def from_unit(cls: Type[_T], unit: _T, name: str) -> _T:
+        return cls(unit._magnitude, unit._dimensions, [name])
+
     def derived(self: _T, relative_magnitude: float, name: str) -> _T:
         return self.__class__(
             relative_magnitude * self._magnitude, self._dimensions, [name]

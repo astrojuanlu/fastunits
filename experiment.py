@@ -11,6 +11,11 @@ m = Unit.base(L, "m")
 cm = m.derived(1e-2, "cm")
 s = Unit.base(T, "s")
 kg = Unit.base(M, "kg")
+rad = Unit.from_unit(m / m, "rad")
+deg = rad.derived(np.pi / 180, "°")
+
+a = 1 << rad
+print(a, a.to(deg))
 
 
 q1 = 10 << cm
