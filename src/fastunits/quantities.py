@@ -27,6 +27,10 @@ class _BaseQuantity:
     def __mul__(self, other):
         return self.__class__(self._value * other._value, self._unit * other._unit)
 
+    def __rmul__(self, other):
+        # Assume other is a number
+        return self.__class__(self._value * other, self._unit)
+
     def __add__(self, other):
         # The line below will fail if the magnitudes are incommensurable
         other_converted_value = other.to_value(self._unit)

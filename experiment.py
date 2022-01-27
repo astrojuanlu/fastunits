@@ -37,7 +37,8 @@ qv2 = [0, 1, 0] << cm
 qv3 = np.random.randn(10_000) << m
 print(qv1 + qv2)
 
-# TODO: 2 * qv1 is not implemented
+print(2 * qv1)
+# print(qv1 * 2)  # Not implemented to reduce complexity
 
 # Promising benchmarks:
 # basic arithmetic is ~2x faster than astropy.units,
