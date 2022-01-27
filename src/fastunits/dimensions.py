@@ -6,6 +6,8 @@ import numpy as np
 from npytypes.rational import rational as R
 from numpy.typing import NDArray
 
+from .printing import rational_exponent_str
+
 # Seven base dimensions in the SI: Time, Length, Mass, Electric current,
 # Thermodynamic temperature, Amount of substance, Luminous intensity
 SI_base = "TLMIϴNJ"
@@ -48,10 +50,8 @@ class Dimension:
     def __repr__(self):
         fragments = []
         for index, exponent in enumerate(self._vector):
-            fragments.append(f"{self._base[index]}({exponent})")
-        # TODO: Use Unicode superscripts instead of parenthesis
-        # TODO: Reuse this logic for units presentation
-        return "".join(fragments) if fragments else "(0)"
+            fragments.append(f"{self._base[index]}{rational_exponent_str(exponent)}")
+        return "".join(fragments)
 
     def __eq__(self, other):
         return (self._vector == other._vector).all() and (self._base == other._base)
