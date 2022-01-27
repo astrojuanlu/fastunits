@@ -37,3 +37,17 @@ Add a longer description here.
   - ndindex optional cythonization https://github.com/Quansight-Labs/ndindex/pull/127
   - sgp4 optional extension https://github.com/brandon-rhodes/python-sgp4/blob/master/setup.py
   - PyO3 rust-numpy https://github.com/PyO3/rust-numpy
+
+### Mathematical theory of dimensions
+
+- https://terrytao.wordpress.com/2012/12/29/a-mathematical-formalisation-of-dimensional-analysis/
+- https://math.stackexchange.com/q/3483152/24849
+- https://mathoverflow.net/q/402497
+
+### Angles as separate dimension
+
+- https://www.physicsforums.com/insights/can-angles-assigned-dimension/
+- "Implications of adopting plane angle as a base quantity in the SI" https://doi.org/10.1088/0026-1394/53/3/998
+- "Physical Entities and Mathematical Representation" https://doi.org/10.1109/IRET-MIL.1962.5008463
+- https://physics.stackexchange.com/q/252288/7641
+- https://physics.stackexchange.com/q/33542/7641
