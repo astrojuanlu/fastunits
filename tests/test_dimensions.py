@@ -29,9 +29,11 @@ def test_dimensions_from_base_returns_expected_dimensions():
     expected_A = Dimension(np.array([1, 0, 0], dtype=R), base=base)
     expected_B = Dimension(np.array([0, 1, 0], dtype=R), base=base)
     expected_C = Dimension(np.array([0, 0, 1], dtype=R), base=base)
+    expected_U = Dimension(np.array([0, 0, 0], dtype=R), base=base)
 
-    A, B, C = dimensions_from_base(base)
+    A, B, C, U = dimensions_from_base(base)
 
     assert A == expected_A
     assert B == expected_B
     assert C == expected_C
+    assert U == expected_U

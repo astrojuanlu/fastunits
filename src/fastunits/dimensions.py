@@ -15,7 +15,7 @@ SI_base = "TLMIϴNJ"
 
 def dimensions_from_base(base: Sequence[str]) -> tuple[Dimension, ...]:
     dimensions = []  # list[Dimension]
-    for dimension_name in base:
+    for dimension_name in list(base) + [""]:
         dimensions.append(Dimension.create(dimension_name, base=base))
 
     return tuple(dimensions)
@@ -33,10 +33,10 @@ class Dimension:
     @classmethod
     def create(cls: Type[_D], name: str, base: Sequence[str]) -> _D:
         # This will raise a ValueError if `name` not found in `base`
-        position = base.index(name)
-
         vector = np.zeros(len(base), dtype=R)
-        vector[position] = 1
+        if name:
+            position = base.index(name)
+            vector[position] = 1
 
         return cls(vector, base)
 
