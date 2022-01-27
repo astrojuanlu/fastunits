@@ -41,7 +41,7 @@ def test_unit_product_returns_expected_result(dimension):
 
 def test_unit_power_returns_expected_result(dimension):
     unit = Unit(2.0, dimension, ["a"])
-    expected_unit = Unit(4.0, dimension * dimension, ["a2"])
+    expected_unit = Unit(4.0, dimension * dimension, ["a²"])
 
     unit_pow = unit ** 2
 
@@ -53,7 +53,7 @@ def test_unit_division_returns_expected_result(dimension):
     unit2 = Unit(2.0, dimension * dimension, ["b", "b"])
 
     # FIXME: Expected names
-    expected_unit = Unit(0.5, dimension ** -1, ["a", "b-1", "b-1"])
+    expected_unit = Unit(0.5, dimension ** -1, ["a", "b⁻¹", "b⁻¹"])
 
     unit_div = unit1 / unit2
 
@@ -64,7 +64,7 @@ def test_unit_division_returns_expected_result(dimension):
 def test_unit_inverse_returns_expected_result(dimension):
     unit = Unit(2.0, dimension, ["a"])
 
-    expected_unit = Unit(0.5, dimension ** -1, ["a-1"])
+    expected_unit = Unit(0.5, dimension ** -1, ["a⁻¹"])
 
     unit_div = 1 / unit  # type: ignore
 

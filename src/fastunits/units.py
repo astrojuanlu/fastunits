@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from fractions import Fraction
 from typing import Type, TypeVar
 
 from .dimensions import Dimension
+from .printing import rational_exponent_str
 
 _T = TypeVar("_T", bound="Unit")
 
@@ -26,6 +26,7 @@ class Unit:
     def __init__(self, magnitude: float, dimensions: Dimension, names: list[str]):
         self._magnitude = magnitude
         self._dimensions = dimensions
+        # TODO: Should names have equal length as the rank of the dimensions?
         self._names = names
 
     @classmethod
@@ -35,12 +36,17 @@ class Unit:
         # hence we hardcode 1.0
         return cls(1.0, dimensions, [name])
 
+    @classmethod
+    def from_unit(cls: Type[_T], unit: _T, name: str) -> _T:
+        return cls(unit._magnitude, unit._dimensions, [name])
+
     def derived(self: _T, relative_magnitude: float, name: str) -> _T:
         return self.__class__(
             relative_magnitude * self._magnitude, self._dimensions, [name]
         )
 
     def __repr__(self):
+        # TODO: This might return things like "cm·"
         return f"{'·'.join(n for n in self._names)}"
 
     def __mul__(self, other):
@@ -54,14 +60,14 @@ class Unit:
         return Unit(
             self._magnitude ** other,
             self._dimensions ** other,
-            [f"{n}{Fraction(other)}" for n in self._names],  # TODO: Rewrite
+            [f"{n}{rational_exponent_str(other)}" for n in self._names],
         )
 
     def __truediv__(self, other):
         return Unit(
             self._magnitude / other._magnitude,
             self._dimensions * other._dimensions ** -1,
-            self._names + [f"{n}-1" for n in other._names],
+            self._names + [f"{n}{rational_exponent_str(-1)}" for n in other._names],
         )
 
     def __rlshift__(self, other):
