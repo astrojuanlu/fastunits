@@ -26,6 +26,7 @@ class Unit:
     def __init__(self, magnitude: float, dimensions: Dimension, names: list[str]):
         self._magnitude = magnitude
         self._dimensions = dimensions
+        # TODO: Should names have equal length as the rank of the dimensions?
         self._names = names
 
     @classmethod
@@ -45,6 +46,7 @@ class Unit:
         )
 
     def __repr__(self):
+        # TODO: This might return things like "cm·"
         return f"{'·'.join(n for n in self._names)}"
 
     def __mul__(self, other):

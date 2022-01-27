@@ -52,7 +52,8 @@ print(2 * qv1)
 # angles as dimensionless quantities is a bit of a mess https://doi.org/10.1088/0026-1394/53/3/998
 # we choose not to take a stance
 
-# Step 3: Mathematical operations (NumPy ufuncs) including angles (conversion to radians)
-# Step 4: Try more micro optimizations (compile with Cython?)
-# Step 5: Complete SI units
-# Step 6: Different CODATA versions
+# Step 3: Proper testing of unit and quantity printing
+# Step 4: Mathematical operations (NumPy ufuncs) including angles (conversion to radians)
+# Step 5: Try more micro optimizations (compile with Cython?)
+# Step 6: Complete SI units
+# Step 7: Different CODATA versions
