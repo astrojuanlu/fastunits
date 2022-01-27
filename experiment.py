@@ -1,24 +1,11 @@
 import numpy as np
 
-# https://github.com/numpy/numpy-dtypes/tree/main/npytypes/rational
-from npytypes.rational import rational as R
-
-from fastunits.dimensions import Dimension
+from fastunits.dimensions import dimensions_from_base
 from fastunits.units import Unit
 from fastunits.quantities import ScalarQuantity, ArrayQuantity
 
 # To experiment, let's stick with TLM
-# SI_base = "TLMIϴNJ"
-# (Time, Length, Mass, Electric current,
-# Thermodynamic temperature, Amount of substance, Luminous intensity)
-SI_base = "TLM"
-
-
-# TODO: Make convenience constructor
-T = Dimension(np.array([1, 0, 0], dtype=R), base=SI_base)
-L = Dimension(np.array([0, 1, 0], dtype=R), base=SI_base)
-M = Dimension(np.array([0, 0, 1], dtype=R), base=SI_base)
-
+T, L, M = dimensions_from_base("TLM")
 
 m = Unit.base(L, "m")
 cm = m.derived(1e-2, "cm")

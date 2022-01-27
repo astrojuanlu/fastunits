@@ -1,5 +1,8 @@
-from typing import Sequence
+from __future__ import annotations
 
+from typing import Sequence, Type, TypeVar
+
+import numpy as np
 from npytypes.rational import rational as R
 from numpy.typing import NDArray
 
@@ -8,12 +11,32 @@ from numpy.typing import NDArray
 SI_base = "TLMIϴNJ"
 
 
+def dimensions_from_base(base: Sequence[str]) -> tuple[Dimension, ...]:
+    dimensions = []  # list[Dimension]
+    for dimension_name in base:
+        dimensions.append(Dimension.create(dimension_name, base=base))
+
+    return tuple(dimensions)
+
+
+_D = TypeVar("_D", bound="Dimension")
+
+
 # Dimensions form a vector space
 class Dimension:
-    def __init__(self, vector: NDArray[R], base: Sequence[str] = SI_base):
-        assert len(vector) == len(base)
+    def __init__(self, vector: NDArray[R], base: Sequence[str]):
         self._vector = vector
         self._base = base
+
+    @classmethod
+    def create(cls: Type[_D], name: str, base: Sequence[str]) -> _D:
+        # This will raise a ValueError if `name` not found in `base`
+        position = base.index(name)
+
+        vector = np.zeros(len(base), dtype=R)
+        vector[position] = 1
+
+        return cls(vector, base)
 
     def __mul__(self, other):
         assert self._base is other._base
