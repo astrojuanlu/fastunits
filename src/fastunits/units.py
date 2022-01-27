@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from fractions import Fraction
 from typing import Type, TypeVar
 
 from .dimensions import Dimension
+from .printing import rational_exponent_str
 
 _T = TypeVar("_T", bound="Unit")
 
@@ -58,14 +58,14 @@ class Unit:
         return Unit(
             self._magnitude ** other,
             self._dimensions ** other,
-            [f"{n}{Fraction(other)}" for n in self._names],  # TODO: Rewrite
+            [f"{n}{rational_exponent_str(other)}" for n in self._names],
         )
 
     def __truediv__(self, other):
         return Unit(
             self._magnitude / other._magnitude,
             self._dimensions * other._dimensions ** -1,
-            self._names + [f"{n}-1" for n in other._names],
+            self._names + [f"{n}{rational_exponent_str(-1)}" for n in other._names],
         )
 
     def __rlshift__(self, other):
