@@ -39,7 +39,7 @@ class _BaseQuantity:
     def to_value(self, unit: Unit) -> Any:
         if unit._dimensions != self._unit._dimensions:
             raise IncommensurableUnitsError("Incommensurable quantities")
-        return (self._unit._magnitude / unit._magnitude) * self._value
+        return (self._unit._multiplier / unit._multiplier) * self._value
 
     def to(self: _T, unit: Unit) -> _T:
         return self.__class__(self.to_value(unit), unit)
