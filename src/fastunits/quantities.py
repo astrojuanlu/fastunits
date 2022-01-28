@@ -39,6 +39,13 @@ class _BaseQuantity:
     def to_value(self, unit: Unit) -> Any:
         if unit._dimensions != self._unit._dimensions:
             raise IncommensurableUnitsError("Incommensurable quantities")
+
+        # TODO: Move multiplicative factor logic to Unit class,
+        # so that more complex logic can be implemented?
+        # However, that would create another layer of indirection
+        # (possibly with a small impact in performance)
+        # only to support non-multiplicative units
+        # like temperature scales (Celsius, Fahrenheit, and the like)
         return (self._unit._multiplier / unit._multiplier) * self._value
 
     def to(self: _T, unit: Unit) -> _T:

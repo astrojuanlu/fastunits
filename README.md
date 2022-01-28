@@ -51,3 +51,9 @@ Add a longer description here.
 - "Physical Entities and Mathematical Representation" https://doi.org/10.1109/IRET-MIL.1962.5008463
 - https://physics.stackexchange.com/q/252288/7641
 - https://physics.stackexchange.com/q/33542/7641
+
+### Units with offsets
+
+- Not as easy as it looks! https://github.com/astropy/astropy/pull/2209/
+- Actually, much more difficult than it looks! https://pint.readthedocs.io/en/latest/nonmult.html
+- unyt also gives up https://github.com/yt-project/unyt/blob/b9c4c21b2e27fd4af9fafa1949dc01296125543c/unyt/unit_object.py#L411-L421
