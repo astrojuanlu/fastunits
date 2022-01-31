@@ -5,7 +5,7 @@ from typing import Type, TypeVar
 from .dimensions import Dimension
 from .printing import rational_exponent_str
 
-_T = TypeVar("_T", bound="Unit")
+_U = TypeVar("_U", bound="Unit")
 
 
 class IncommensurableUnitsError(ValueError):
@@ -30,17 +30,17 @@ class Unit:
         self._names = names
 
     @classmethod
-    def base(cls: Type[_T], dimensions: Dimension, name: str) -> _T:
+    def base(cls: Type[_U], dimensions: Dimension, name: str) -> _U:
         # The multiplier of base units is not important,
         # what's important is the relative multiplier of derived units,
         # hence we hardcode 1.0
         return cls(1.0, dimensions, [name])
 
     @classmethod
-    def from_unit(cls: Type[_T], unit: _T, name: str) -> _T:
+    def from_unit(cls: Type[_U], unit: _U, name: str) -> _U:
         return cls(unit._multiplier, unit._dimensions, [name])
 
-    def derived(self: _T, relative_multiplier: float, name: str) -> _T:
+    def derived(self: _U, relative_multiplier: float, name: str) -> _U:
         return self.__class__(
             relative_multiplier * self._multiplier, self._dimensions, [name]
         )
