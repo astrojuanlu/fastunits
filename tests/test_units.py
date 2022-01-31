@@ -47,6 +47,18 @@ def test_unit_product_returns_expected_result(dimension):
     assert unit_prod == expected_composite_unit
 
 
+def test_unit_product_same_unit_returns_expected_result(dimension):
+    # This test is here to make explicit that
+    # str(a * a) != str(a ** 2)
+    # although it's not clear to me whether we should change the behavior?
+    unit = Unit(1.0, dimension, ["a"])
+    expected_composite_unit = Unit(1.0, dimension * dimension, ["a", "a"])
+
+    unit_prod = unit * unit
+
+    assert unit_prod == expected_composite_unit
+
+
 def test_unit_power_returns_expected_result(dimension):
     unit = Unit(2.0, dimension, ["a"])
     expected_unit = Unit(4.0, dimension * dimension, ["a²"])
@@ -77,3 +89,20 @@ def test_unit_inverse_returns_expected_result(dimension):
     unit_div = 1 / unit  # type: ignore
 
     assert unit_div == expected_unit
+
+
+@pytest.mark.parametrize(
+    "names,expected_str",
+    [
+        [["a"], "a"],
+        [["bc"], "bc"],
+        [["a", "a"], "a·a"],
+        [["a²"], "a²"],
+        [["a", "bc⁻¹"], "a·bc⁻¹"],
+    ],
+)
+def test_unit_str_returns_expected_result(names, expected_str, dimension):
+    unit = Unit(1.0, dimension, ["a"])
+    expected_str = "a"
+
+    assert str(unit) == expected_str
