@@ -71,6 +71,17 @@ def test_scalar_quantity_product_returns_expected_result(unit):
     assert q == expected_q
 
 
+def test_scalar_quantity_times_scalar_returns_expected_result(unit):
+    q1 = ScalarQuantity(2.0, unit)
+    m = 3.0
+
+    expected_q = ScalarQuantity(6.0, unit)
+
+    q = m * q1
+
+    assert q == expected_q
+
+
 def test_scalar_quantity_addition_returns_expected_result(unit):
     q1 = ScalarQuantity(2.0, unit)
     q2 = ScalarQuantity(3.0, unit)
