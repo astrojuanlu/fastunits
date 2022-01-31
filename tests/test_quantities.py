@@ -154,3 +154,21 @@ def test_array_quantity_different_scales_are_equivalent(unit):
     q_derived = q1.to(u2)
 
     assert q_derived.is_equivalent_exact(expected_quantity)
+
+
+@pytest.mark.parametrize(
+    "unit_names,expected_str",
+    [
+        [["a"], "1.0 a"],
+        [["a", "a"], "1.0 a·a"],
+        [["a²"], "1.0 a²"],
+        [["bc", "bc⁻¹"], "1.0 bc·bc⁻¹"],
+    ],
+)
+def test_scalar_quantity_str_returns_expected_result(
+    unit_names, expected_str, dimension
+):
+    unit = Unit(1.0, dimension, unit_names)
+    q1 = ScalarQuantity(1.0, unit)
+
+    assert str(q1) == expected_str
