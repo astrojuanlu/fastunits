@@ -56,6 +56,14 @@ class Unit:
             self._names + other._names,
         )
 
+    def __rtruediv__(self, other):
+        # Assume other is a number
+        return Unit(
+            other / self._multiplier,
+            self._dimensions ** -1,
+            [f"{n}⁻¹" for n in self._names],
+        )
+
     def __pow__(self, other):
         return Unit(
             self._multiplier ** other,

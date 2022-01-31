@@ -80,13 +80,12 @@ def test_unit_division_returns_expected_result(dimension):
     assert unit_div == expected_unit
 
 
-@pytest.mark.xfail(raises=TypeError, reason="Units can only divide themselves for now")
 def test_unit_inverse_returns_expected_result(dimension):
     unit = Unit(2.0, dimension, ["a"])
 
     expected_unit = Unit(0.5, dimension ** -1, ["a⁻¹"])
 
-    unit_div = 1 / unit  # type: ignore
+    unit_div = 1 / unit
 
     assert unit_div == expected_unit
 
