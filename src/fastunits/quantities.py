@@ -21,7 +21,7 @@ class _BaseQuantity:
         return self._unit
 
     def __repr__(self):
-        suffix = str(self._unit)
+        suffix = self._unit.to_str()
         return f"{self._value} {suffix}" if suffix else f"{self._value}"
 
     def __mul__(self, other):

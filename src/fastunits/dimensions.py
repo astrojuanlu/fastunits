@@ -15,7 +15,7 @@ SI_base = "TLMIϴNJ"
 
 def dimensions_from_base(base: Sequence[str]) -> tuple[Dimension, ...]:
     dimensions = []  # list[Dimension]
-    for dimension_name in list(base) + [""]:
+    for dimension_name in base:
         dimensions.append(Dimension.create(dimension_name, base=base))
 
     return tuple(dimensions)
@@ -41,6 +41,7 @@ class Dimension:
         return cls(vector, base)
 
     def __mul__(self, other):
+        # FIXME: Turn into proper error
         assert self._base is other._base
         return Dimension(self._vector + other._vector, self._base)
 

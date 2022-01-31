@@ -1,15 +1,21 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Type, TypeVar
 
 from .dimensions import Dimension
 from .printing import rational_exponent_str
 
-_T = TypeVar("_T", bound="Unit")
+_U = TypeVar("_U", bound="Unit")
 
 
 class IncommensurableUnitsError(ValueError):
     pass
+
+
+# The closest thing to a "sentinel value" supported by Python and MyPy
+class _Dimensionless(Enum):
+    DIMENSIONLESS = "(dimensionless)"
 
 
 # To relate each unit with the others
@@ -23,37 +29,57 @@ class Unit:
     # astropy/units/core.py#L630-L632
     __array_priority__ = 1001
 
-    def __init__(self, multiplier: float, dimensions: Dimension, names: list[str]):
+    def __init__(
+        self,
+        multiplier: float,
+        dimensions: Dimension,
+        names: list[str | _Dimensionless],
+    ):
         self._multiplier = multiplier
         self._dimensions = dimensions
         # TODO: Should names have equal length as the rank of the dimensions?
         self._names = names
 
     @classmethod
-    def base(cls: Type[_T], dimensions: Dimension, name: str) -> _T:
+    def base(cls: Type[_U], dimensions: Dimension, name: str) -> _U:
         # The multiplier of base units is not important,
         # what's important is the relative multiplier of derived units,
         # hence we hardcode 1.0
         return cls(1.0, dimensions, [name])
 
     @classmethod
-    def from_unit(cls: Type[_T], unit: _T, name: str) -> _T:
+    def from_unit(cls: Type[_U], unit: _U, name: str) -> _U:
         return cls(unit._multiplier, unit._dimensions, [name])
 
-    def derived(self: _T, relative_multiplier: float, name: str) -> _T:
+    @classmethod
+    def dimensionless(cls: Type[_U], dimension: Dimension) -> _U:
+        return cls(1.0, dimension ** 0, [_Dimensionless.DIMENSIONLESS])
+
+    def derived(self: _U, relative_multiplier: float, name: str) -> _U:
         return self.__class__(
             relative_multiplier * self._multiplier, self._dimensions, [name]
         )
 
+    def to_str(self) -> str:
+        return "·".join(n for n in self._names if n is not _Dimensionless.DIMENSIONLESS)
+
     def __repr__(self):
         # TODO: This might return things like "cm·"
-        return f"{'·'.join(n for n in self._names)}"
+        return self.to_str() or _Dimensionless.DIMENSIONLESS.value
 
     def __mul__(self, other):
         return Unit(
             self._multiplier * other._multiplier,
             self._dimensions * other._dimensions,
             self._names + other._names,
+        )
+
+    def __rtruediv__(self, other):
+        # Assume other is a number
+        return Unit(
+            other / self._multiplier,
+            self._dimensions ** -1,
+            [f"{n}⁻¹" for n in self._names],
         )
 
     def __pow__(self, other):

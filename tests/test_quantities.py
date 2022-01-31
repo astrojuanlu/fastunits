@@ -71,6 +71,17 @@ def test_scalar_quantity_product_returns_expected_result(unit):
     assert q == expected_q
 
 
+def test_scalar_quantity_times_scalar_returns_expected_result(unit):
+    q1 = ScalarQuantity(2.0, unit)
+    m = 3.0
+
+    expected_q = ScalarQuantity(6.0, unit)
+
+    q = m * q1
+
+    assert q == expected_q
+
+
 def test_scalar_quantity_addition_returns_expected_result(unit):
     q1 = ScalarQuantity(2.0, unit)
     q2 = ScalarQuantity(3.0, unit)
@@ -143,3 +154,41 @@ def test_array_quantity_different_scales_are_equivalent(unit):
     q_derived = q1.to(u2)
 
     assert q_derived.is_equivalent_exact(expected_quantity)
+
+
+@pytest.mark.parametrize(
+    "unit_names,expected_str",
+    [
+        [["a"], "1.0 a"],
+        [["a", "a"], "1.0 a·a"],
+        [["a²"], "1.0 a²"],
+        [["bc", "bc⁻¹"], "1.0 bc·bc⁻¹"],
+    ],
+)
+def test_scalar_quantity_str_returns_expected_result(
+    unit_names, expected_str, dimension
+):
+    unit = Unit(1.0, dimension, unit_names)
+    q1 = ScalarQuantity(1.0, unit)
+
+    assert str(q1) == expected_str
+
+
+def test_scalar_dimensionless_quantity_str_returns_expected_result(dimension):
+    unit = Unit.dimensionless(dimension)
+    q1 = ScalarQuantity(1.0, unit)
+    expected_str = "1.0"
+
+    assert str(q1) == expected_str
+
+
+def test_scalar_quantity_product_dimensionless_does_not_leave_astray_name(dimension):
+    a = Unit.base(dimension, "a")
+    one = Unit.dimensionless(dimension)
+    q1 = ScalarQuantity(2.0, a)
+    q2 = ScalarQuantity(3.0, one)
+    expected_str = "6.0 a"
+
+    q = q1 * q2
+
+    assert str(q) == expected_str

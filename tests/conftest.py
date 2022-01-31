@@ -5,7 +5,7 @@ import pytest
 
 from fastunits.dimensions import Dimension
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from npytypes.rational import rational as R
     from numpy.typing import NDArray
 

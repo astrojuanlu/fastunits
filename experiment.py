@@ -5,7 +5,7 @@ from fastunits.units import Unit
 from fastunits.quantities import ScalarQuantity, ArrayQuantity
 
 # To experiment, let's stick with TLM
-T, L, M, U = dimensions_from_base("TLM")
+T, L, M = dimensions_from_base("TLM")
 
 m = Unit.base(L, "m")
 cm = m.derived(1e-2, "cm")
@@ -17,7 +17,7 @@ kg = Unit.base(M, "kg")
 rad = Unit.from_unit(m / m, "rad")
 deg = rad.derived(np.pi / 180, "°")
 
-one = dimensionless_unscaled = Unit.base(U, "")
+one = dimensionless_unscaled = Unit.dimensionless(L)
 
 
 a = 1 << rad
@@ -45,14 +45,15 @@ print(2 * qv1)
 # quantity creation is ~10x faster than astropy.units.
 # composite unit creation is ~1.2x faster than astropy.units.
 
-# This was Step 0
+# Done:
 # Step 1: Use faster vector (numpy.array?) and fraction arithmetic (cfractions?) (done)
 # stdlib.fractions + Vector gave decent performance, but rational dtype with NumPy arrays was better
 # Step 2: Figure out dimensionless quantities (including angles)
 # angles as dimensionless quantities is a bit of a mess https://doi.org/10.1088/0026-1394/53/3/998
 # we choose not to take a stance
-
 # Step 3: Proper testing of unit and quantity printing
+
+# To do:
 # Step 4: Mathematical operations (NumPy ufuncs) including angles (conversion to radians)
 # Step 5: Try more micro optimizations (compile with Cython?)
 # Step 6: Complete SI units
