@@ -172,3 +172,23 @@ def test_scalar_quantity_str_returns_expected_result(
     q1 = ScalarQuantity(1.0, unit)
 
     assert str(q1) == expected_str
+
+
+def test_scalar_dimensionless_quantity_str_returns_expected_result(dimension):
+    unit = Unit.dimensionless(dimension)
+    q1 = ScalarQuantity(1.0, unit)
+    expected_str = "1.0"
+
+    assert str(q1) == expected_str
+
+
+def test_scalar_quantity_product_dimensionless_does_not_leave_astray_name(dimension):
+    a = Unit.base(dimension, "a")
+    one = Unit.dimensionless(dimension)
+    q1 = ScalarQuantity(2.0, a)
+    q2 = ScalarQuantity(3.0, one)
+    expected_str = "6.0 a"
+
+    q = q1 * q2
+
+    assert str(q) == expected_str

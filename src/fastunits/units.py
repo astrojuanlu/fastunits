@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Type, TypeVar
 
 from .dimensions import Dimension
@@ -10,6 +11,11 @@ _U = TypeVar("_U", bound="Unit")
 
 class IncommensurableUnitsError(ValueError):
     pass
+
+
+# The closest thing to a "sentinel value" supported by Python and MyPy
+class _Dimensionless(Enum):
+    DIMENSIONLESS = "(dimensionless)"
 
 
 # To relate each unit with the others
@@ -23,7 +29,12 @@ class Unit:
     # astropy/units/core.py#L630-L632
     __array_priority__ = 1001
 
-    def __init__(self, multiplier: float, dimensions: Dimension, names: list[str]):
+    def __init__(
+        self,
+        multiplier: float,
+        dimensions: Dimension,
+        names: list[str | _Dimensionless],
+    ):
         self._multiplier = multiplier
         self._dimensions = dimensions
         # TODO: Should names have equal length as the rank of the dimensions?
@@ -40,14 +51,21 @@ class Unit:
     def from_unit(cls: Type[_U], unit: _U, name: str) -> _U:
         return cls(unit._multiplier, unit._dimensions, [name])
 
+    @classmethod
+    def dimensionless(cls: Type[_U], dimension: Dimension) -> _U:
+        return cls(1.0, dimension ** 0, [_Dimensionless.DIMENSIONLESS])
+
     def derived(self: _U, relative_multiplier: float, name: str) -> _U:
         return self.__class__(
             relative_multiplier * self._multiplier, self._dimensions, [name]
         )
 
+    def to_str(self) -> str:
+        return "·".join(n for n in self._names if n is not _Dimensionless.DIMENSIONLESS)
+
     def __repr__(self):
         # TODO: This might return things like "cm·"
-        return f"{'·'.join(n for n in self._names)}"
+        return self.to_str() or _Dimensionless.DIMENSIONLESS.value
 
     def __mul__(self, other):
         return Unit(

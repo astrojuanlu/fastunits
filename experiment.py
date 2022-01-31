@@ -17,7 +17,7 @@ kg = Unit.base(M, "kg")
 rad = Unit.from_unit(m / m, "rad")
 deg = rad.derived(np.pi / 180, "°")
 
-one = dimensionless_unscaled = Unit.base(U, "")
+one = dimensionless_unscaled = Unit.dimensionless(L)
 
 
 a = 1 << rad

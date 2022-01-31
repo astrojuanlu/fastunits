@@ -1,6 +1,6 @@
 import pytest
 
-from fastunits.units import Unit
+from fastunits.units import Unit, _Dimensionless
 
 
 @pytest.fixture
@@ -18,6 +18,16 @@ def test_unit_base_returns_expected_result(dimension):
     unit = Unit.base(dimension, "a")
 
     assert unit == expected_unit
+
+
+def test_unit_dimensionless_returns_expected_result(dimension):
+    expected_unit = Unit(1.0, dimension ** 0, [_Dimensionless.DIMENSIONLESS])
+    expected_str = "(dimensionless)"
+
+    unit = Unit.dimensionless(dimension)
+
+    assert unit == expected_unit
+    assert str(unit) == expected_str
 
 
 def test_unit_derived_returns_expected_result(dimension):
