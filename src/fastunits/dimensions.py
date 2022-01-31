@@ -41,6 +41,7 @@ class Dimension:
         return cls(vector, base)
 
     def __mul__(self, other):
+        # FIXME: Turn into proper error
         assert self._base is other._base
         return Dimension(self._vector + other._vector, self._base)
 
