@@ -5,7 +5,7 @@ from fastunits.units import Unit
 from fastunits.quantities import ScalarQuantity, ArrayQuantity
 
 # To experiment, let's stick with TLM
-T, L, M, U = dimensions_from_base("TLM")
+T, L, M = dimensions_from_base("TLM")
 
 m = Unit.base(L, "m")
 cm = m.derived(1e-2, "cm")
