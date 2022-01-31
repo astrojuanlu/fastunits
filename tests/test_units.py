@@ -28,6 +28,14 @@ def test_unit_derived_returns_expected_result(dimension):
     assert unit_d == expected_unit
 
 
+def test_unit_from_unit_returns_expected_result(dimension):
+    unit_base = Unit.base(dimension, "a")
+    unit_d = Unit.from_unit(unit_base, "b")
+    expected_unit = Unit(1.0, dimension, ["b"])
+
+    assert unit_d == expected_unit
+
+
 def test_unit_product_returns_expected_result(dimension):
     unit1 = Unit(1.0, dimension, ["a"])
     unit2 = Unit(2.0, dimension, ["b"])
