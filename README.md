@@ -66,6 +66,8 @@ to maintain a simple and hackable implementation that can work with many array c
 The big question is: should `np.add(q1, q2)` return a fastunits Quantity object?
 And it turns out that this has lots of ramifications.
 
+_[Thread in scientific-python about these topics](https://discuss.scientific-python.org/t/advice-and-guidance-about-array-api-for-a-units-package/336?u=astrojuanlu)_
+
 There are several methods currently available to extend or interface with NumPy,
 and proposals to add a few more.
 However, reading the original NumPy Enhancement Proposals (NEPs for short)
